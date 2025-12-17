@@ -1,102 +1,105 @@
 import type { Show } from '@/data/shows'
 
-function formatDate(dateISO: string) {
-  const d = new Date(dateISO)
-  if (Number.isNaN(d.getTime())) return dateISO
-  return new Intl.DateTimeFormat('en-NG', {
-    weekday: 'short',
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(d)
+function toGCalDate(iso: string) {
+  // Google accepts YYYYMMDDTHHMMSSZ or without Z; simplest is stripping separators.
+  // If you pass offset ISO, it will still work for placeholders; refine later if needed.
+  return iso.replace(/[-:]/g, '').replace('.000', '')
+}
+
+function googleCalendarLink(show: Show) {
+  const base = 'https://www.google.com/calendar/render?action=TEMPLATE'
+  const text = `&text=${encodeURIComponent(show.title)}`
+  const start = toGCalDate(show.startISO)
+  const end = show.endISO ? toGCalDate(show.endISO) : start
+  const dates = `&dates=${encodeURIComponent(`${start}/${end}`)}`
+  const location = `&location=${encodeURIComponent(
+    [show.venueName, show.venueAddress, show.city].filter(Boolean).join(', ')
+  )}`
+  const details = `&details=${encodeURIComponent(show.notes ?? '')}`
+  return `${base}${text}${dates}${details}${location}`
 }
 
 export default function ShowCard({ show }: { show: Show }) {
   return (
     <article className="rounded-xl border border-white/10 bg-white/5 p-5">
-      <div className="flex flex-col gap-1">
-        <h3 className="text-lg font-semibold">{show.title}</h3>
-        <p className="text-sm text-white/70">
-          {formatDate(show.dateISO)}
-          {show.time ? ` • ${show.time}` : ''}
-          {show.city ? ` • ${show.city}` : ''}
-        </p>
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div className="min-w-0">
+          <h3 className="text-base font-semibold text-white md:text-lg">
+            {show.title}
+          </h3>
 
-        {show.venueName ? (
           <p className="mt-2 text-sm text-white/70">
-            Venue: <span className="text-white/85">{show.venueName}</span>
+            <span className="font-medium text-white/85">{show.venueName}</span>
+            {show.venueAddress ? ` • ${show.venueAddress}` : ''}
+            {show.city ? ` • ${show.city}` : ''}
           </p>
-        ) : null}
 
-        {show.venueAddress ? (
-          <p className="text-sm text-white/60">{show.venueAddress}</p>
-        ) : null}
+          <div className="mt-2 text-xs text-white/60">
+            <time dateTime={show.startISO}>{show.startISO}</time>
+            {show.endISO ? (
+              <>
+                {' '}
+                – <time dateTime={show.endISO}>{show.endISO}</time>
+              </>
+            ) : null}
+          </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-4 grid gap-1 text-xs text-white/60">
+            {show.status ? <p>Status: {show.status}</p> : null}
+            {show.price ? <p>Price: {show.price}</p> : null}
+            {show.ageLimit ? <p>Age: {show.ageLimit}</p> : null}
+          </div>
+
+          {show.lineup?.length ? (
+            <div className="mt-4">
+              <p className="text-xs uppercase tracking-widest text-white/50">
+                Lineup
+              </p>
+              <ul className="mt-2 list-disc pl-5 text-sm text-white/70">
+                {show.lineup.map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {show.notes ? (
+            <p className="mt-4 text-sm text-white/70">{show.notes}</p>
+          ) : null}
+        </div>
+
+        <div className="flex shrink-0 flex-wrap gap-3 md:flex-col md:items-end">
           {show.ticketUrl ? (
             <a
               href={show.ticketUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-md bg-white px-3 py-1.5 text-xs font-medium text-black hover:bg-white/90"
+              className="inline-flex items-center justify-center rounded-md bg-amber-300 px-4 py-2 text-xs font-semibold text-black hover:bg-amber-200"
             >
-              Get tickets
+              Tickets
             </a>
           ) : null}
 
-          {show.rsvpUrl ? (
-            <a
-              href={show.rsvpUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-md border border-white/15 px-3 py-1.5 text-xs text-white/80 hover:bg-white/5 hover:text-white"
-            >
-              RSVP
-            </a>
-          ) : null}
+          <a
+            href={googleCalendarLink(show)}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center rounded-md border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold text-white/85 hover:text-white"
+          >
+            Add to calendar
+          </a>
 
           {show.mapUrl ? (
             <a
               href={show.mapUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-md border border-white/15 px-3 py-1.5 text-xs text-white/80 hover:bg-white/5 hover:text-white"
+              className="text-xs text-white/70 underline underline-offset-4 hover:text-white"
             >
-              View map
+              Open map
             </a>
           ) : null}
         </div>
-
-        {show.price || show.ageRestriction || show.dressCode ? (
-          <div className="mt-4 grid gap-1 text-xs text-white/60">
-            {show.price ? <p>Price: {show.price}</p> : null}
-            {show.ageRestriction ? <p>Age: {show.ageRestriction}</p> : null}
-            {show.dressCode ? <p>Dress code: {show.dressCode}</p> : null}
-          </div>
-        ) : null}
-
-        {show.lineup?.length ? (
-          <div className="mt-4">
-            <p className="text-xs uppercase tracking-widest text-white/60">
-              Lineup
-            </p>
-            <p className="mt-2 text-sm text-white/70">{show.lineup.join(' • ')}</p>
-          </div>
-        ) : null}
-
-        {show.contact?.phoneOrWhatsapp || show.contact?.email ? (
-          <div className="mt-4 border-t border-white/10 pt-4 text-sm text-white/70">
-            <p className="text-xs uppercase tracking-widest text-white/60">
-              Contact
-            </p>
-            {show.contact?.phoneOrWhatsapp ? (
-              <p className="mt-2">WhatsApp/Phone: {show.contact.phoneOrWhatsapp}</p>
-            ) : null}
-            {show.contact?.email ? <p>Email: {show.contact.email}</p> : null}
-          </div>
-        ) : null}
-
-        {show.notes ? <p className="mt-4 text-sm text-white/60">{show.notes}</p> : null}
       </div>
     </article>
   )

@@ -1,69 +1,67 @@
 export type Show = {
   id: string
   title: string
-
-  dateISO: string // "2025-12-21"
-  time?: string // "7:00 PM"
-  doors?: string // "6:00 PM"
-
-  city?: string
-  state?: string
-  country?: string
-
-  venueName?: string
+  startISO: string      // e.g. 2026-01-10T19:00:00+01:00
+  endISO?: string
+  city: string
+  venueName: string
   venueAddress?: string
-
   ticketUrl?: string
-  rsvpUrl?: string
-  mapUrl?: string
-
+  status?: 'Available' | 'Sold out' | 'Announced'
   price?: string
-  ageRestriction?: string
-  dressCode?: string
-
+  ageLimit?: string
   lineup?: string[]
   notes?: string
-  contact?: {
-    name?: string
-    phoneOrWhatsapp?: string
-    email?: string
-  }
+  mapUrl?: string
 }
 
 export const shows: Show[] = [
   {
-    id: 'exclusive-experience-2025-12-21',
-    title: 'Exclusive Experience with Jordan (Placeholder Title)',
-
-    // Real date from your instruction / public promo mentions:
-    dateISO: '2025-12-21', // 21st December
-
-    // Placeholders (replace later)
-    time: '7:00 PM',
-    doors: '6:00 PM',
-
-    city: 'Kaduna (placeholder)',
-    state: 'Kaduna State (placeholder)',
-    country: 'Nigeria',
-
-    venueName: 'Venue Name (placeholder)',
-    venueAddress: 'Full address + landmark (placeholder)',
-
-    ticketUrl: 'https://ticket-link-placeholder.example',
-    rsvpUrl: 'https://rsvp-link-placeholder.example',
-    mapUrl: 'https://maps-link-placeholder.example',
-
-    price: '₦10,000 (placeholder)',
-    ageRestriction: '18+ (placeholder)',
-    dressCode: 'Smart casual (placeholder)',
-
-    lineup: ['Jordan Bangoji', 'Guest act (placeholder)', 'DJ (placeholder)'],
-    notes:
-      'Limited seats available (placeholder). Gates close at (placeholder).',
-    contact: {
-      name: 'Management (placeholder)',
-      phoneOrWhatsapp: '+234 XXX XXX XXXX',
-      email: 'booking@yourdomain.com',
-    },
+    id: 'show-1',
+    title: 'Live in Lagos (Placeholder)',
+    startISO: '2026-01-10T19:00:00+01:00',
+    endISO: '2026-01-10T22:00:00+01:00',
+    city: 'Lagos, NG',
+    venueName: 'Landmark (Placeholder)',
+    venueAddress: 'Water Corporation Dr, Victoria Island, Lagos',
+    status: 'Available',
+    price: '₦10,000+',
+    ageLimit: '18+',
+    lineup: ['Jordan Bangoji', 'Guest (TBA)'],
+    notes: 'Doors 6:00 PM (Placeholder).',
+    ticketUrl: '#',
+    mapUrl: 'https://maps.google.com/?q=Landmark+Lagos',
+  },
+  {
+    id: 'show-2',
+    title: 'Live in Abuja (Placeholder)',
+    startISO: '2026-02-02T19:00:00+01:00',
+    endISO: '2026-02-02T22:00:00+01:00',
+    city: 'Abuja, NG',
+    venueName: 'Transcorp Hall (Placeholder)',
+    venueAddress: 'Transcorp Hilton, Abuja',
+    status: 'Announced',
+    price: 'TBA',
+    ageLimit: 'All ages',
+    lineup: ['Jordan Bangoji'],
+    notes: 'More details soon.',
+    ticketUrl: '#',
+    mapUrl: 'https://maps.google.com/?q=Transcorp+Hilton+Abuja',
+  },
+  {
+    id: 'show-3',
+    title: 'Live in London (Placeholder)',
+    startISO: '2026-03-18T19:30:00Z',
+    endISO: '2026-03-18T22:30:00Z',
+    city: 'London, UK',
+    venueName: 'O2 Academy (Placeholder)',
+    venueAddress: 'London, UK',
+    status: 'Available',
+    price: '£20+',
+    ageLimit: '16+',
+    lineup: ['Jordan Bangoji'],
+    notes: 'Support act TBA.',
+    ticketUrl: '#',
+    mapUrl: 'https://maps.google.com/?q=O2+Academy+London',
   },
 ]

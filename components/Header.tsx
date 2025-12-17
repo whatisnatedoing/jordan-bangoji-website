@@ -1,56 +1,60 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import Container from './Container'
+import Container from '@/components/Container'
 import { site } from '@/lib/site'
 
-function HamburgerIcon({ open }: { open: boolean }) {
-  return (
-    <div className="relative h-5 w-6">
-      <span
-        className={[
-          'absolute left-0 top-0 block h-0.5 w-6 bg-white transition-transform duration-200',
-          open ? 'translate-y-2 rotate-45' : '',
-        ].join(' ')}
-      />
-      <span
-        className={[
-          'absolute left-0 top-2 block h-0.5 w-6 bg-white transition-opacity duration-200',
-          open ? 'opacity-0' : 'opacity-100',
-        ].join(' ')}
-      />
-      <span
-        className={[
-          'absolute left-0 top-4 block h-0.5 w-6 bg-white transition-transform duration-200',
-          open ? '-translate-y-2 -rotate-45' : '',
-        ].join(' ')}
-      />
-    </div>
-  )
-}
-
 export default function Header() {
-  const [open, setOpen] = useState(false)
   const pathname = usePathname()
+  const [open, setOpen] = useState(false)
 
-  // Close the menu when route changes
+  const nav = useMemo(
+    () => [
+      { href: '/', label: 'Home' },
+      { href: '/music', label: 'Music' },
+      { href: '/videos', label: 'Videos' },
+      { href: '/shows', label: 'Shows' },
+      { href: '/tribe', label: 'Tribe' },
+      // { href: '/press', label: 'Press' },
+      { href: '/contact', label: 'Contact' },
+    ],
+    [],
+  )
+
+  // Close drawer on route change
+  useEffect(() => setOpen(false), [pathname])
+
+  // ESC to close + lock background scroll
   useEffect(() => {
-    setOpen(false)
-  }, [pathname])
+    if (!open) return
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [open])
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
+    <header className="fixed inset-x-0 top-0 z-50 bg-black/85 backdrop-blur">
       <Container>
-        <div className="flex items-center justify-between py-4">
-          <Link href="/" className="font-semibold tracking-wide text-white">
+        <div className="flex h-16 items-center justify-between">
+          <Link href="/" className="text-sm font-semibold tracking-wide text-white">
             {site.name}
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden gap-6 md:flex">
-            {site.nav.map((item) => (
+          <nav className="hidden items-center gap-6 md:flex">
+            {nav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -61,35 +65,85 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Mobile button */}
+          {/* Mobile burger */}
           <button
             type="button"
-            aria-label="Open menu"
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-            className="rounded-md border border-white/15 p-2 hover:bg-white/5 md:hidden"
+            onClick={() => setOpen(true)}
+            aria-label="Open navigation"
+            className="md:hidden"
           >
-            <HamburgerIcon open={open} />
+            <span className="block h-[2px] w-6 bg-white" />
+            <span className="mt-1.5 block h-[2px] w-6 bg-white" />
+            <span className="mt-1.5 block h-[2px] w-6 bg-white" />
+          </button>
+        </div>
+      </Container>
+
+      {/* Backdrop */}
+      <div
+        onClick={() => setOpen(false)}
+        className={[
+          'fixed inset-0 z-50 bg-black/60 transition-opacity duration-200',
+          open ? 'opacity-100' : 'pointer-events-none opacity-0',
+        ].join(' ')}
+      />
+
+      {/* Drawer */}
+      <aside
+        className={[
+          'fixed right-0 top-0 z-[60] h-dvh w-[86vw] max-w-sm bg-black',
+          'border-l border-white/10',
+          'transition-transform duration-200 ease-out',
+          open ? 'translate-x-0' : 'translate-x-full',
+        ].join(' ')}
+        aria-hidden={!open}
+      >
+        <div className="flex h-16 items-center justify-between px-6">
+          <span className="text-sm font-semibold tracking-wide text-white">
+            {site.name}
+          </span>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="text-sm text-white/80 hover:text-white"
+          >
+            Close
           </button>
         </div>
 
-        {/* Mobile dropdown */}
-        {open ? (
-          <div className="pb-4 md:hidden">
-            <nav className="grid gap-2 rounded-xl border border-white/10 bg-white/5 p-3">
-              {site.nav.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-md px-3 py-2 text-sm text-white/80 hover:bg-white/5 hover:text-white"
+        <div className="px-6 pb-10 pt-6">
+          <nav className="grid gap-4 text-2xl">
+            {nav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-white/90 hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="mt-10 border-t border-white/10 pt-6">
+            <p className="text-xs uppercase tracking-widest text-white/50">
+              Social
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {site.socials.map((s) => (
+                <a
+                  key={s.href}
+                  href={s.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
                 >
-                  {item.label}
-                </Link>
+                  {s.label}
+                </a>
               ))}
-            </nav>
+            </div>
           </div>
-        ) : null}
-      </Container>
+        </div>
+      </aside>
     </header>
   )
 }

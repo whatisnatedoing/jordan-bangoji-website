@@ -1,19 +1,17 @@
-export type ReleasePlatformLinks = {
-  spotify?: string
-  appleMusic?: string
-  audiomack?: string
-  youtube?: string
-}
-
 export type Release = {
   id: string
   title: string
-  type: 'Single' | 'EP' | 'Album'
-  year?: number
-  description?: string
-  youtubeVideoId?: string
-  links: ReleasePlatformLinks
+  type: 'Single' | 'EP' | 'Album' | 'Feature'
+  year?: string
+  coverImage: string // /images/covers/...
   featured?: boolean
+  youtubeVideoId?: string
+  links: {
+    spotify?: string
+    appleMusic?: string
+    audiomack?: string
+    youtube?: string
+  }
 }
 
 export const releases: Release[] = [
@@ -21,44 +19,25 @@ export const releases: Release[] = [
     id: 'soyayya',
     title: 'Soyayya',
     type: 'Single',
-    year: 2025,
-    description: 'Northern love song (placeholder copy).',
+    year: '2025',
+    featured: true,
     youtubeVideoId: 'CNE_PdsxckQ',
+    coverImage: '/images/covers/soyayya.jpg', // add later or point to placeholder
     links: {
-      spotify:
-        'https://open.spotify.com/track/11M7WcIxVxcSatwKLLPp8r?si=cdc2cdf53a8f4499',
-      appleMusic: '',
-      audiomack: '',
+      spotify: 'https://open.spotify.com/track/PLACEHOLDER',
       youtube: 'https://www.youtube.com/watch?v=CNE_PdsxckQ',
     },
-    featured: true,
   },
-  {
-    id: 'art-and-love-ep',
-    title: 'ART & LOVE',
-    type: 'EP',
-    year: 2022,
-    description: 'EP (placeholder copy).',
+
+  // More placeholders (add as many as you want)
+  ...Array.from({ length: 15 }).map((_, i) => ({
+    id: `release-${i + 1}`,
+    title: `Release Title ${i + 1} (Placeholder)`,
+    type: (i % 3 === 0 ? 'Single' : i % 3 === 1 ? 'EP' : 'Album') as const,
+    year: '2024',
+    coverImage: '/images/covers/placeholder.jpg',
     links: {
-      spotify:
-        'https://open.spotify.com/album/62nD5YTltKcw6IK3plzXWt?si=6XZBFtAKT3etynChooGjsA',
-      appleMusic: '',
-      audiomack: '',
-      youtube: '',
+      spotify: 'https://open.spotify.com/artist/702zIZlmgDwWKAqWW4WX5d',
     },
-  },
-  {
-    id: 'if-i',
-    title: 'IF I',
-    type: 'Album',
-    year: 2025,
-    description: 'Project (placeholder copy).',
-    links: {
-      spotify:
-        'https://open.spotify.com/album/0CzeJeROyBn1gFPOWmo4wh?si=zC8VmuNtQD2xpvtPt4rmJQ',
-      appleMusic: '',
-      audiomack: '',
-      youtube: '',
-    },
-  },
+  })),
 ]
