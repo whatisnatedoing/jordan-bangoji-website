@@ -4,6 +4,7 @@ export type Release = {
   type: 'Single' | 'EP' | 'Album' | 'Feature'
   year?: string
   coverImage: string // /images/covers/...
+  description?: string
   featured?: boolean
   youtubeVideoId?: string
   links: {
@@ -23,6 +24,7 @@ export const releases: Release[] = [
     featured: true,
     youtubeVideoId: 'CNE_PdsxckQ',
     coverImage: '/images/covers/soyayya.jpg', // add later or point to placeholder
+    description: 'A soulful single (placeholder).',
     links: {
       spotify: 'https://open.spotify.com/track/PLACEHOLDER',
       youtube: 'https://www.youtube.com/watch?v=CNE_PdsxckQ',
@@ -33,7 +35,7 @@ export const releases: Release[] = [
   ...Array.from({ length: 15 }).map((_, i) => ({
     id: `release-${i + 1}`,
     title: `Release Title ${i + 1} (Placeholder)`,
-    type: (i % 3 === 0 ? 'Single' : i % 3 === 1 ? 'EP' : 'Album') as const,
+    type: (i % 3 === 0 ? 'Single' : i % 3 === 1 ? 'EP' : 'Album') as Release['type'],
     year: '2024',
     coverImage: '/images/covers/placeholder.jpg',
     links: {

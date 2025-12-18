@@ -187,7 +187,7 @@ export default function HomePage() {
                 <div>
                   <p className="text-sm font-medium text-white md:text-base">{s.title}</p>
                   <p className="mt-1 text-xs text-white/60">
-                    {s.dateISO}
+                    {new Date(s.startISO).toLocaleDateString()}
                     {s.city ? ` • ${s.city}` : ''}
                     {s.venueName ? ` • ${s.venueName}` : ''}
                   </p>
