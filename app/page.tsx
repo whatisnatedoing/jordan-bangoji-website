@@ -1,11 +1,11 @@
 import Container from '@/components/Container'
+import HeroFloatingCollage from '@/components/HeroFloatingCollage'
 import SpotifyArtistEmbed from '@/components/SpotifyArtistEmbed'
 import YouTubeEmbed from '@/components/YouTubeEmbed'
 import { releases } from '@/data/releases'
 import { shows } from '@/data/shows'
 import { videos } from '@/data/videos'
 import { site } from '@/lib/site'
-import Image from 'next/image'
 import Link from 'next/link'
 
 export default function HomePage() {
@@ -15,147 +15,136 @@ export default function HomePage() {
     : videos[0]
 
   return (
-    <div>
-      {/* HERO BACKDROP BLOCK (hero image ends before Videos) */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/images/jordan-hero.jpg"
-            alt="Jordan Bangoji"
-            fill
-            priority
-            className="object-cover object-top"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/30 to-zinc-950" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(245,158,11,0.22),transparent_48%)]" />
-        </div>
+    <div className="bg-zinc-950 text-white">
+      {/* BACKDROP BLOCK (Hero + Music share same background) */}
+      <div className="relative overflow-hidden">
+        <HeroFloatingCollage
+          backgroundSrc="/images/hero/jordan-hero.jpg"
+          floatingSrcs={[
+            '/images/hero/jordan-hero-1.jpg',
+            '/images/hero/jordan-hero-2.jpg',
+            '/images/hero/jordan-hero-3.jpg',
+          ]}
+        />
 
-        <div className="relative">
-          {/* navbar offset */}
-          <div className="pt-16">
-            {/* HERO */}
-            <section className="min-h-[88vh]">
-              <Container>
-                <div className="pt-28 md:pt-40">
-                  <p className="text-xs uppercase tracking-widest text-white/70">
-                    {site.tagline}
-                  </p>
+        {/* HERO */}
+        <section className="relative min-h-[78svh] md:min-h-[100svh]">
+          <Container>
+            {/* Move hero text DOWN on both mobile + desktop */}
+            <div className="min-h-[78svh] md:min-h-[100svh] pt-32 md:pt-44 flex items-end pb-14 md:pb-24">
+              <div className="max-w-xl">
+                <p className="text-xs uppercase tracking-widest text-white/70">{site.tagline}</p>
 
-                  <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-tight md:text-6xl">
-                    {site.name}
-                  </h1>
+                <h1 className="mt-4 text-4xl font-semibold leading-tight md:text-6xl">{site.name}</h1>
 
-                  <p className="mt-5 max-w-xl text-sm leading-6 text-white/75">
-                    {site.description}
-                  </p>
+                <p className="mt-4 text-sm leading-6 text-white/80">{site.description}</p>
 
-                  <div className="mt-8 flex flex-wrap gap-6 text-sm">
-                    <Link
-                      href="/music"
-                      className="font-semibold text-amber-300 underline underline-offset-4 hover:text-amber-200"
-                    >
-                      Listen now
-                    </Link>
-                    <Link
-                      href="/videos"
-                      className="font-semibold text-white/80 underline underline-offset-4 hover:text-white"
-                    >
-                      Videos
-                    </Link>
-                    <Link
-                      href="/shows"
-                      className="font-semibold text-white/80 underline underline-offset-4 hover:text-white"
-                    >
-                      Shows
-                    </Link>
-                  </div>
-                </div>
-              </Container>
-            </section>
-
-            {/* MUSIC (summary) */}
-            <section className="pb-14">
-              <Container>
-                <div className="flex items-baseline justify-between">
-                  <h2 className="text-lg font-semibold uppercase tracking-widest text-white">
-                    Music
-                  </h2>
-                  <Link
-                    href="/music"
-                    className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
+                <div className="mt-7 flex flex-wrap gap-6 text-sm">
+                  <a
+                    href="/#music"
+                    className="font-semibold text-amber-300 underline underline-offset-4 hover:text-amber-200"
                   >
-                    View all
+                    Listen
+                  </a>
+                  <a href="/#videos" className="font-semibold text-white/85 underline underline-offset-4 hover:text-white">
+                    Videos
+                  </a>
+                  <Link href="/shows" className="font-semibold text-white/85 underline underline-offset-4 hover:text-white">
+                    Shows
+                  </Link>
+                  <Link href="/press" className="font-semibold text-white/85 underline underline-offset-4 hover:text-white">
+                    Press
                   </Link>
                 </div>
+              </div>
+            </div>
+          </Container>
+        </section>
 
-                <div className="mt-6 divide-y divide-white/10">
-                  {releases.slice(0, 3).map((r) => (
-                    <div key={r.id} className="flex items-center justify-between gap-6 py-4">
-                      <div>
-                        <p className="text-sm font-medium text-white md:text-base">{r.title}</p>
-                        <p className="mt-1 text-xs text-white/60">
-                          {r.type}
-                          {r.year ? ` • ${r.year}` : ''}
-                        </p>
-                      </div>
+        {/* MUSIC (still on backdrop) */}
+        <section id="music" className="relative scroll-mt-24 pb-14">
+          <Container>
+            <div className="flex items-baseline justify-between gap-6">
+              <h2 className="text-lg font-semibold tracking-wide">Music</h2>
+              <Link href="/music" className="text-sm text-white/70 underline underline-offset-4 hover:text-white">
+                View all
+              </Link>
+            </div>
 
-                      <div className="flex items-center gap-4">
-                        {r.links.spotify ? (
-                          <a
-                            href={r.links.spotify}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-sm font-medium text-amber-300 underline underline-offset-4 hover:text-amber-200"
-                          >
-                            Stream
-                          </a>
-                        ) : null}
-                      </div>
-                    </div>
-                  ))}
+            <div className="mt-6 divide-y divide-white/10">
+              {releases.slice(0, 3).map((r) => (
+                <div key={r.id} className="flex items-center justify-between gap-6 py-4">
+                  <div>
+                    <p className="text-sm text-white">{r.title}</p>
+                    <p className="mt-1 text-xs text-white/60">
+                      {r.type}
+                      {r.year ? ` • ${r.year}` : ''}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    {r.links?.spotify ? (
+                      <a
+                        href={r.links.spotify}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
+                      >
+                        Stream
+                      </a>
+                    ) : null}
+                    {r.links?.youtube ? (
+                      <a
+                        href={r.links.youtube}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
+                      >
+                        Video
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
-              </Container>
-            </section>
-          </div>
-        </div>
-      </section>
+              ))}
+            </div>
+          </Container>
+        </section>
 
-      {/* VIDEOS (summary) */}
-      <section className="bg-zinc-950 py-14">
+        {/* Spacer so the fade has room before Videos starts */}
+        <div className="relative h-10" />
+      </div>
+
+      {/* VIDEOS (starts after backdrop fade) */}
+      <section id="videos" className="scroll-mt-24 border-t border-white/10 bg-zinc-950 py-14">
         <Container>
-          <div className="flex items-baseline justify-between">
-            <h2 className="text-lg font-semibold uppercase tracking-widest text-white">
-              Videos
-            </h2>
-            <Link
-              href="/videos"
+          <div className="flex items-baseline justify-between gap-6">
+            <h2 className="text-lg font-semibold tracking-wide">Videos</h2>
+            <a
+              href="https://www.youtube.com/c/JordanBangoji"
+              target="_blank"
+              rel="noreferrer"
               className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
             >
               View all
-            </Link>
+            </a>
           </div>
 
           <div className="mt-6 grid gap-10 md:grid-cols-2 md:items-start">
-            <div className="rounded-xl border border-white/10 bg-white/5 p-3">
-              <YouTubeEmbed
-                videoId={featuredVideo.youtubeId}
-                title={`${site.name} – ${featuredVideo.title}`}
-              />
+            <div>
+              <YouTubeEmbed videoId={featuredVideo.youtubeId} title={`${site.name} — ${featuredVideo.title}`} />
             </div>
 
             <div className="divide-y divide-white/10">
               {videos.slice(0, 3).map((v) => (
                 <div key={v.id} className="flex items-center justify-between gap-6 py-4">
                   <div>
-                    <p className="text-sm font-medium text-white md:text-base">{v.title}</p>
+                    <p className="text-sm text-white">{v.title}</p>
                     <p className="mt-1 text-xs text-white/60">{v.kind ?? 'Video'}</p>
                   </div>
-
                   <a
                     href={`https://www.youtube.com/watch?v=${v.youtubeId}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm font-medium text-amber-300 underline underline-offset-4 hover:text-amber-200"
+                    className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
                   >
                     Watch
                   </a>
@@ -166,17 +155,12 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* SHOWS (summary) */}
-      <section className="bg-zinc-950 py-14">
+      {/* SHOWS preview (optional) */}
+      <section className="border-t border-white/10 py-14">
         <Container>
-          <div className="flex items-baseline justify-between">
-            <h2 className="text-lg font-semibold uppercase tracking-widest text-white">
-              Shows
-            </h2>
-            <Link
-              href="/shows"
-              className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
-            >
+          <div className="flex items-baseline justify-between gap-6">
+            <h2 className="text-lg font-semibold tracking-wide">Shows</h2>
+            <Link href="/shows" className="text-sm text-white/70 underline underline-offset-4 hover:text-white">
               View all
             </Link>
           </div>
@@ -185,44 +169,49 @@ export default function HomePage() {
             {shows.slice(0, 3).map((s) => (
               <div key={s.id} className="flex items-center justify-between gap-6 py-4">
                 <div>
-                  <p className="text-sm font-medium text-white md:text-base">{s.title}</p>
+                  <p className="text-sm text-white">{s.title}</p>
                   <p className="mt-1 text-xs text-white/60">
                     {new Date(s.startISO).toLocaleDateString()}
                     {s.city ? ` • ${s.city}` : ''}
                     {s.venueName ? ` • ${s.venueName}` : ''}
                   </p>
                 </div>
-
-                {s.ticketUrl ? (
-                  <a
-                    href={s.ticketUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-sm font-medium text-amber-300 underline underline-offset-4 hover:text-amber-200"
-                  >
-                    Tickets
-                  </a>
-                ) : null}
+                <div className="flex items-center gap-4">
+                  {s.ticketUrl ? (
+                    <a
+                      href={s.ticketUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
+                    >
+                      Tickets
+                    </a>
+                  ) : null}
+                  {s.mapUrl ? (
+                    <a
+                      href={s.mapUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
+                    >
+                      Map
+                    </a>
+                  ) : null}
+                </div>
               </div>
             ))}
+            {shows.length === 0 ? <p className="mt-4 text-sm text-white/70">No shows announced yet.</p> : null}
           </div>
         </Container>
       </section>
 
-      {/* SPOTIFY + FOOTER */}
-      <section className="bg-zinc-950 py-14">
+      {/* SPOTIFY */}
+      <section className="border-t border-white/10 py-14">
         <Container>
-          <h2 className="text-lg font-semibold uppercase tracking-widest text-white">
-            Spotify
-          </h2>
+          <h2 className="text-lg font-semibold tracking-wide">Spotify</h2>
           <div className="mt-4">
             <SpotifyArtistEmbed />
           </div>
-
-          <footer className="mt-10 border-t border-white/10 pt-6 text-center text-xs text-white/60">
-            Built by Danbury.
-          </footer>
-
         </Container>
       </section>
     </div>

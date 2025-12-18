@@ -6,27 +6,39 @@ import { usePathname } from 'next/navigation'
 import Container from '@/components/Container'
 import { site } from '@/lib/site'
 
+function BurgerIcon({ open }: { open: boolean }) {
+  return (
+    <div className="relative h-5 w-6">
+      <span
+        className={[
+          'absolute left-0 top-0 block h-0.5 w-6 bg-white transition-transform duration-200',
+          open ? 'translate-y-2 rotate-45' : '',
+        ].join(' ')}
+      />
+      <span
+        className={[
+          'absolute left-0 top-2 block h-0.5 w-6 bg-white transition-opacity duration-200',
+          open ? 'opacity-0' : 'opacity-100',
+        ].join(' ')}
+      />
+      <span
+        className={[
+          'absolute left-0 top-4 block h-0.5 w-6 bg-white transition-transform duration-200',
+          open ? '-translate-y-2 -rotate-45' : '',
+        ].join(' ')}
+      />
+    </div>
+  )
+}
+
 export default function Header() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
 
-  const nav = useMemo(
-    () => [
-      { href: '/', label: 'Home' },
-      { href: '/music', label: 'Music' },
-      { href: '/videos', label: 'Videos' },
-      { href: '/shows', label: 'Shows' },
-      { href: '/tribe', label: 'Tribe' },
-      // { href: '/press', label: 'Press' },
-      { href: '/contact', label: 'Contact' },
-    ],
-    [],
-  )
+  const nav = useMemo(() => site.nav, [])
 
-  // Close drawer on route change
   useEffect(() => setOpen(false), [pathname])
 
-  // ESC to close + lock background scroll
   useEffect(() => {
     if (!open) return
 
@@ -35,6 +47,7 @@ export default function Header() {
     }
 
     document.addEventListener('keydown', onKeyDown)
+
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
@@ -45,21 +58,17 @@ export default function Header() {
   }, [open])
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-black/85 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/60 backdrop-blur">
       <Container>
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex items-center justify-between py-4">
           <Link href="/" className="text-sm font-semibold tracking-wide text-white">
             {site.name}
           </Link>
 
-          {/* Desktop nav */}
+          {/* Desktop nav: direct relevant links (NO Menu button) */}
           <nav className="hidden items-center gap-6 md:flex">
             {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm text-white/80 hover:text-white"
-              >
+              <Link key={item.href} href={item.href} className="text-sm text-white/80 hover:text-white">
                 {item.label}
               </Link>
             ))}
@@ -68,82 +77,46 @@ export default function Header() {
           {/* Mobile burger */}
           <button
             type="button"
-            onClick={() => setOpen(true)}
-            aria-label="Open navigation"
-            className="md:hidden"
+            aria-label="Open menu"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="rounded-md border border-white/15 p-2 hover:bg-white/5 md:hidden"
           >
-            <span className="block h-[2px] w-6 bg-white" />
-            <span className="mt-1.5 block h-[2px] w-6 bg-white" />
-            <span className="mt-1.5 block h-[2px] w-6 bg-white" />
+            <BurgerIcon open={open} />
           </button>
         </div>
       </Container>
 
-      {/* Backdrop */}
-      <div
-        onClick={() => setOpen(false)}
-        className={[
-          'fixed inset-0 z-50 bg-black/60 transition-opacity duration-200',
-          open ? 'opacity-100' : 'pointer-events-none opacity-0',
-        ].join(' ')}
-      />
-
-      {/* Drawer */}
-      <aside
-        className={[
-          'fixed right-0 top-0 z-[60] h-dvh w-[86vw] max-w-sm bg-black',
-          'border-l border-white/10',
-          'transition-transform duration-200 ease-out',
-          open ? 'translate-x-0' : 'translate-x-full',
-        ].join(' ')}
-        aria-hidden={!open}
-      >
-        <div className="flex h-16 items-center justify-between px-6">
-          <span className="text-sm font-semibold tracking-wide text-white">
-            {site.name}
-          </span>
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="text-sm text-white/80 hover:text-white"
-          >
-            Close
-          </button>
-        </div>
-
-        <div className="px-6 pb-10 pt-6">
-          <nav className="grid gap-4 text-2xl">
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-white/90 hover:text-white"
+      {/* Mobile overlay: nav only (NO socials) */}
+      {open ? (
+        <div className="fixed inset-0 z-50 bg-zinc-950">
+          <Container>
+            <div className="flex items-center justify-between py-4">
+              <span className="text-sm font-semibold tracking-wide text-white">{site.name}</span>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="rounded-md border border-white/15 p-2 hover:bg-white/5"
+                aria-label="Close menu"
               >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="mt-10 border-t border-white/10 pt-6">
-            <p className="text-xs uppercase tracking-widest text-white/50">
-              Social
-            </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              {site.socials.map((s) => (
-                <a
-                  key={s.href}
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
-                >
-                  {s.label}
-                </a>
-              ))}
+                <BurgerIcon open />
+              </button>
             </div>
-          </div>
+
+            <nav className="pt-10">
+              <ul className="grid gap-5 text-2xl">
+                {nav.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="text-white/90 hover:text-white">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </Container>
         </div>
-      </aside>
+      ) : null}
     </header>
   )
 }
