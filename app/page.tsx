@@ -16,7 +16,7 @@ export default function HomePage() {
 
   return (
     <div className="bg-zinc-950 text-white">
-      {/* BACKDROP BLOCK (Hero + Music share same background) */}
+      {/* BACKDROP BLOCK: Hero + Music + Videos share the same background */}
       <div className="relative overflow-hidden">
         <HeroFloatingCollage
           backgroundSrc="/images/hero/jordan-hero.jpg"
@@ -27,11 +27,10 @@ export default function HomePage() {
           ]}
         />
 
-        {/* HERO */}
-        <section className="relative min-h-[78svh] md:min-h-[100svh]">
+        {/* HERO (full screen; text at bottom on mobile) */}
+        <section className="relative min-h-[100svh]">
           <Container>
-            {/* Move hero text DOWN on both mobile + desktop */}
-            <div className="min-h-[78svh] md:min-h-[100svh] pt-32 md:pt-44 flex items-end pb-14 md:pb-24">
+            <div className="relative z-40 min-h-[100svh] pt-24 md:pt-32 flex items-end pb-12 md:pb-20">
               <div className="max-w-xl">
                 <p className="text-xs uppercase tracking-widest text-white/70">{site.tagline}</p>
 
@@ -61,8 +60,8 @@ export default function HomePage() {
           </Container>
         </section>
 
-        {/* MUSIC (still on backdrop) */}
-        <section id="music" className="relative scroll-mt-24 pb-14">
+        {/* MUSIC (still on hero background) */}
+        <section id="music" className="relative z-40 scroll-mt-24 pt-6 pb-10">
           <Container>
             <div className="flex items-baseline justify-between gap-6">
               <h2 className="text-lg font-semibold tracking-wide">Music</h2>
@@ -71,7 +70,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="mt-6 divide-y divide-white/10">
+            <div className="mt-5 divide-y divide-white/10">
               {releases.slice(0, 3).map((r) => (
                 <div key={r.id} className="flex items-center justify-between gap-6 py-4">
                   <div>
@@ -109,54 +108,51 @@ export default function HomePage() {
           </Container>
         </section>
 
-        {/* Spacer so the fade has room before Videos starts */}
-        <div className="relative h-10" />
+        {/* VIDEOS (now also on hero background, and pulled up closer to Music) */}
+        <section id="videos" className="relative z-40 scroll-mt-24 pt-6 pb-12">
+          <Container>
+            <div className="flex items-baseline justify-between gap-6">
+              <h2 className="text-lg font-semibold tracking-wide">Videos</h2>
+              <a
+                href="https://www.youtube.com/c/JordanBangoji"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
+              >
+                View all
+              </a>
+            </div>
+
+            <div className="mt-5 grid gap-10 md:grid-cols-2 md:items-start">
+              <div>
+                <YouTubeEmbed videoId={featuredVideo.youtubeId} title={`${site.name} — ${featuredVideo.title}`} />
+              </div>
+
+              <div className="divide-y divide-white/10">
+                {videos.slice(0, 3).map((v) => (
+                  <div key={v.id} className="flex items-center justify-between gap-6 py-4">
+                    <div>
+                      <p className="text-sm text-white">{v.title}</p>
+                      <p className="mt-1 text-xs text-white/60">{v.kind ?? 'Video'}</p>
+                    </div>
+                    <a
+                      href={`https://www.youtube.com/watch?v=${v.youtubeId}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
+                    >
+                      Watch
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Container>
+        </section>
       </div>
 
-      {/* VIDEOS (starts after backdrop fade) */}
-      <section id="videos" className="scroll-mt-24 border-t border-white/10 bg-zinc-950 py-14">
-        <Container>
-          <div className="flex items-baseline justify-between gap-6">
-            <h2 className="text-lg font-semibold tracking-wide">Videos</h2>
-            <a
-              href="https://www.youtube.com/c/JordanBangoji"
-              target="_blank"
-              rel="noreferrer"
-              className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
-            >
-              View all
-            </a>
-          </div>
-
-          <div className="mt-6 grid gap-10 md:grid-cols-2 md:items-start">
-            <div>
-              <YouTubeEmbed videoId={featuredVideo.youtubeId} title={`${site.name} — ${featuredVideo.title}`} />
-            </div>
-
-            <div className="divide-y divide-white/10">
-              {videos.slice(0, 3).map((v) => (
-                <div key={v.id} className="flex items-center justify-between gap-6 py-4">
-                  <div>
-                    <p className="text-sm text-white">{v.title}</p>
-                    <p className="mt-1 text-xs text-white/60">{v.kind ?? 'Video'}</p>
-                  </div>
-                  <a
-                    href={`https://www.youtube.com/watch?v=${v.youtubeId}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
-                  >
-                    Watch
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* SHOWS preview (optional) */}
-      <section className="border-t border-white/10 py-14">
+      {/* SHOWS (no top border line) */}
+      <section className="py-12">
         <Container>
           <div className="flex items-baseline justify-between gap-6">
             <h2 className="text-lg font-semibold tracking-wide">Shows</h2>
@@ -165,7 +161,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="mt-6 divide-y divide-white/10">
+          <div className="mt-5 divide-y divide-white/10">
             {shows.slice(0, 3).map((s) => (
               <div key={s.id} className="flex items-center justify-between gap-6 py-4">
                 <div>
@@ -176,28 +172,6 @@ export default function HomePage() {
                     {s.venueName ? ` • ${s.venueName}` : ''}
                   </p>
                 </div>
-                <div className="flex items-center gap-4">
-                  {s.ticketUrl ? (
-                    <a
-                      href={s.ticketUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
-                    >
-                      Tickets
-                    </a>
-                  ) : null}
-                  {s.mapUrl ? (
-                    <a
-                      href={s.mapUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
-                    >
-                      Map
-                    </a>
-                  ) : null}
-                </div>
               </div>
             ))}
             {shows.length === 0 ? <p className="mt-4 text-sm text-white/70">No shows announced yet.</p> : null}
@@ -205,8 +179,8 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* SPOTIFY */}
-      <section className="border-t border-white/10 py-14">
+      {/* SPOTIFY (no top border line) */}
+      <section className="py-12">
         <Container>
           <h2 className="text-lg font-semibold tracking-wide">Spotify</h2>
           <div className="mt-4">
