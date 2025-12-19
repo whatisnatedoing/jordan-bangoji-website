@@ -9,7 +9,7 @@ export default function Footer() {
     <footer className="border-t border-white/10">
       <Container>
         <div className="flex flex-col items-center text-center gap-4 py-10 text-sm text-white/70">
-          <p className="text-white/80">{site.tagline}</p>
+          
 
           <div>
             <p className="mb-2 text-xs uppercase tracking-widest text-white/60">Follow</p>

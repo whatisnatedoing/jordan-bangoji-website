@@ -32,7 +32,6 @@ export default function HomePage() {
           <Container>
             <div className="relative z-40 min-h-[100svh] pt-24 md:pt-32 flex items-end pb-12 md:pb-20">
               <div className="max-w-xl">
-                <p className="text-xs uppercase tracking-widest text-white/70">{site.tagline}</p>
 
                 <h1 className="mt-4 text-4xl font-semibold leading-tight md:text-6xl">{site.name}</h1>
 
