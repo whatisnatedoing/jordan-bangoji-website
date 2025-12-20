@@ -97,7 +97,7 @@ export default function HomePage() {
       </div>
 
       {/* MUSIC */}
-      <section id="music" className="py-12">
+      <section id="music" className="py-12 scroll-mt-24">
         <Container>
           <div className="flex items-baseline justify-between gap-6">
             <h2 className="text-lg font-semibold tracking-wide">Music</h2>
@@ -146,7 +146,7 @@ export default function HomePage() {
       </section>
 
       {/* VIDEOS */}
-      <section id="videos" className="border-t border-white/10 py-12">
+      <section id="videos" className="border-t border-white/10 py-12 scroll-mt-24">
         <Container>
           <div className="flex items-baseline justify-between gap-6">
             <h2 className="text-lg font-semibold tracking-wide">Videos</h2>
@@ -187,7 +187,7 @@ export default function HomePage() {
       </section>
 
       {/* SHOWS */}
-      <section className="border-t border-white/10 py-12">
+      <section id="shows" className="border-t border-white/10 py-12">
         <Container>
           <div className="flex items-baseline justify-between gap-6">
             <h2 className="text-lg font-semibold tracking-wide">Shows</h2>

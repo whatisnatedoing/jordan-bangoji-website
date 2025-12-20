@@ -21,7 +21,7 @@ export default function Footer() {
           <p className="text-xs text-white/50">
             Built by{' '}
             <a
-              href="https://natedanbury.netlify.app"
+              href="https://jordanbangoji.netlify.app"
               target="_blank"
               rel="nofollow noreferrer"
               className="text-white/70 underline underline-offset-4 hover:text-white"

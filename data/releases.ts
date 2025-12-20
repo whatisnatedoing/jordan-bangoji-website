@@ -44,6 +44,20 @@ export const releases: Release[] = [
       youtube: 'https://www.youtube.com/watch?v=pbKdLfQf72c',
     },
   },
+  {
+    id: 'no_conditional_love',
+    title: 'No Conditional Love',
+    type: 'Single',
+    year: '2025',
+    featured: false,
+    youtubeVideoId: 'pbKdLfQf72c',
+    coverImage: '/images/covers/no_conditional_love.jpg',
+    description: 'A soulful single (placeholder).',
+    links: {
+      spotify: 'https://open.spotify.com/album/4DleAeGR7zOCZmgUmXSmB8?si=Xy--11cxRjSAfPt6cMoIDg',
+      youtube: 'https://www.youtube.com/watch?v=NdFGequozBg',
+    },
+  },
 
   // Placeholders
   ...Array.from({ length: 15 }).map((_, i) => ({
