@@ -71,13 +71,13 @@ export default function HomePage() {
                       Listen
                     </Link>
                     <Link
-                      href="/videos"
+                      href="/#videos"
                       className="font-semibold text-white/85 underline underline-offset-4 hover:text-white"
                     >
                       Videos
                     </Link>
                     <Link
-                      href="/shows"
+                      href="/#shows"
                       className="font-semibold text-white/85 underline underline-offset-4 hover:text-white"
                     >
                       Shows
