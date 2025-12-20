@@ -1,7 +1,7 @@
 export type Show = {
   id: string
   title: string
-  startISO: string      // e.g. 2026-01-10T19:00:00+01:00
+  startISO: string // e.g. 2026-01-10T19:00:00+01:00
   endISO?: string
   city: string
   venueName: string

@@ -1,10 +1,11 @@
 export const site = {
   name: 'Jordan Bangoji',
   tribeName: 'Tribe of Jordan',
-
+  tagline: 'I SELL AUTHENTICITY FOR FREE',
   description: "Welcome to Jordan's Corner.",
 
   nav: [
+    { href: '/', label: 'Home' },
     { href: '/#music', label: 'Music' },
     { href: '/#videos', label: 'Videos' },
     { href: '/shows', label: 'Shows' },

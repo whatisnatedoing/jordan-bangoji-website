@@ -3,6 +3,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { Montserrat } from 'next/font/google'
+import { site } from '@/lib/site'
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -11,20 +12,19 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: 'Jordan Bangoji',
+  title: {
+    default: site.name,
+    template: `%s • ${site.name}`,
+  },
   description: 'Official artiste website: music, videos, tours, press.',
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <head>
-        <meta name="color-scheme" content="dark light" />
-        <meta name="theme-color" content="#0a0a0a" />
-      </head>
-      <body className={montserrat.className}>
+      <body className={`${montserrat.className} min-h-dvh bg-zinc-950 text-white antialiased`}>
         <Header />
-        {children}
+        <main className="min-h-[calc(100dvh-120px)]">{children}</main>
         <Footer />
       </body>
     </html>

@@ -36,7 +36,7 @@ export const releases: Release[] = [
     type: 'Single',
     year: '2025',
     featured: true,
-    youtubeVideoId: 'CNE_PdsxckQ',
+    youtubeVideoId: 'pbKdLfQf72c',
     coverImage: '/images/covers/if_i.jpg',
     description: 'A soulful single (placeholder).',
     links: {
