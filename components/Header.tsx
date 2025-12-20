@@ -35,22 +35,28 @@ export default function Header() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
 
-  const nav = useMemo(() => site.nav, [])
+  const nav = useMemo(
+    () => [
+      { href: '/#music', label: 'Music' },
+      { href: '/#videos', label: 'Videos' },
+      { href: '/shows', label: 'Shows' },
+      { href: '/tribe', label: 'Tribe' },
+      { href: '/contact', label: 'Contact' },
+      { href: '/press', label: 'Press' },
+    ],
+    []
+  )
 
   useEffect(() => setOpen(false), [pathname])
 
   useEffect(() => {
     if (!open) return
-
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false)
     }
-
     document.addEventListener('keydown', onKeyDown)
-
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-
     return () => {
       document.removeEventListener('keydown', onKeyDown)
       document.body.style.overflow = prevOverflow
@@ -58,14 +64,13 @@ export default function Header() {
   }, [open])
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/60 backdrop-blur">
+    <header className="sticky top-0 z-50 bg-zinc-950/60 backdrop-blur">
       <Container>
         <div className="flex items-center justify-between py-4">
           <Link href="/" className="text-sm font-semibold tracking-wide text-white">
             {site.name}
           </Link>
 
-          {/* Desktop nav: direct relevant links (NO Menu button) */}
           <nav className="hidden items-center gap-6 md:flex">
             {nav.map((item) => (
               <Link key={item.href} href={item.href} className="text-sm text-white/80 hover:text-white">
@@ -74,10 +79,9 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Mobile burger */}
           <button
             type="button"
-            aria-label="Open menu"
+            aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
             className="rounded-md border border-white/15 p-2 hover:bg-white/5 md:hidden"
@@ -87,34 +91,44 @@ export default function Header() {
         </div>
       </Container>
 
-      {/* Mobile overlay: nav only (NO socials) */}
+      {/* Mobile sheet */}
       {open ? (
-        <div className="fixed inset-0 z-50 bg-zinc-950">
-          <Container>
-            <div className="flex items-center justify-between py-4">
-              <span className="text-sm font-semibold tracking-wide text-white">{site.name}</span>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="rounded-md border border-white/15 p-2 hover:bg-white/5"
-                aria-label="Close menu"
-              >
-                <BurgerIcon open />
-              </button>
-            </div>
+        <div className="fixed inset-0 z-50 md:hidden">
+          <button
+            aria-label="Close menu"
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setOpen(false)}
+          />
 
-            <nav className="pt-10">
-              <ul className="grid gap-5 text-2xl">
-                {nav.map((item) => (
-                  <li key={item.href}>
-                    <Link href={item.href} className="text-white/90 hover:text-white">
+          <div className="absolute left-0 right-0 top-0 border-b border-white/10 bg-zinc-950">
+            <Container>
+              <div className="flex items-center justify-between py-4">
+                <span className="text-sm font-semibold tracking-wide text-white">{site.name}</span>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="rounded-md border border-white/15 p-2 hover:bg-white/5"
+                  aria-label="Close menu"
+                >
+                  <BurgerIcon open />
+                </button>
+              </div>
+
+              <div className="pb-6">
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-2">
+                  {nav.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="block rounded-xl px-3 py-3 text-base text-white/85 hover:bg-white/5"
+                    >
                       {item.label}
                     </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </Container>
+                  ))}
+                </div>
+              </div>
+            </Container>
+          </div>
         </div>
       ) : null}
     </header>

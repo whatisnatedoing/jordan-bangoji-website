@@ -21,17 +21,31 @@ export const releases: Release[] = [
     title: 'Soyayya',
     type: 'Single',
     year: '2025',
-    featured: true,
+    featured: false,
     youtubeVideoId: 'CNE_PdsxckQ',
-    coverImage: '/images/covers/soyayya.jpg', // add later or point to placeholder
+    coverImage: '/images/covers/soyayya.jpg',
     description: 'A soulful single (placeholder).',
     links: {
       spotify: 'https://open.spotify.com/track/PLACEHOLDER',
       youtube: 'https://www.youtube.com/watch?v=CNE_PdsxckQ',
     },
   },
+  {
+    id: 'if_i',
+    title: 'If I',
+    type: 'Single',
+    year: '2025',
+    featured: true,
+    youtubeVideoId: 'CNE_PdsxckQ',
+    coverImage: '/images/covers/if_i.jpg',
+    description: 'A soulful single (placeholder).',
+    links: {
+      spotify: 'https://open.spotify.com/track/5XvPukPtl9hm0VhH4Afvnz?si=3329ae1092894d02',
+      youtube: 'https://www.youtube.com/watch?v=pbKdLfQf72c',
+    },
+  },
 
-  // More placeholders (add as many as you want)
+  // Placeholders
   ...Array.from({ length: 15 }).map((_, i) => ({
     id: `release-${i + 1}`,
     title: `Release Title ${i + 1} (Placeholder)`,

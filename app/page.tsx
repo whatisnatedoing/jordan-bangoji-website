@@ -1,5 +1,6 @@
 import Container from '@/components/Container'
 import HeroFloatingCollage from '@/components/HeroFloatingCollage'
+import LatestReleaseCard from '@/components/LatestReleaseCard'
 import SpotifyArtistEmbed from '@/components/SpotifyArtistEmbed'
 import YouTubeEmbed from '@/components/YouTubeEmbed'
 import { releases } from '@/data/releases'
@@ -7,6 +8,9 @@ import { shows } from '@/data/shows'
 import { videos } from '@/data/videos'
 import { site } from '@/lib/site'
 import Link from 'next/link'
+import NowPlaying from '@/components/NowPlaying'
+
+
 
 export default function HomePage() {
   const featuredRelease = releases.find((r) => r.featured) ?? releases[0]
@@ -14,9 +18,11 @@ export default function HomePage() {
     ? { youtubeId: featuredRelease.youtubeVideoId, title: featuredRelease.title }
     : videos[0]
 
+  const nowPlayingTitles = releases.slice(0, 3).map((r) => r.title)
+
   return (
     <div className="bg-zinc-950 text-white">
-      {/* BACKDROP BLOCK: Hero + Music + Videos share the same background */}
+      {/* BACKDROP BLOCK (Hero + Music + Videos share background) */}
       <div className="relative overflow-hidden">
         <HeroFloatingCollage
           backgroundSrc="/images/hero/jordan-hero.jpg"
@@ -27,15 +33,35 @@ export default function HomePage() {
           ]}
         />
 
-        {/* HERO (full screen; text at bottom on mobile) */}
+        {/* Subtle grain overlay on top of hero BG (premium) */}
+        <div
+          className="pointer-events-none absolute inset-0 z-20 opacity-[0.12] mix-blend-overlay"
+          style={{
+            backgroundImage:
+              'url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27120%27 height=%27120%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%272%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27120%27 height=%27120%27 filter=%27url(%23n)%27 opacity=%270.45%27/%3E%3C/svg%3E")',
+          }}
+        />
+
+        {/* HERO */}
         <section className="relative min-h-[100svh]">
           <Container>
-            <div className="relative z-40 min-h-[100svh] pt-24 md:pt-32 flex items-end pb-12 md:pb-20">
+            <div className="relative z-40 min-h-[100svh] flex flex-col justify-end pb-12 md:pb-20 pt-24 md:pt-32">
+              {/* Latest release card: right on desktop, above text on mobile */}
+              <div className="w-full">
+                <div className="hidden md:flex justify-end">
+                  <LatestReleaseCard release={featuredRelease} />
+                </div>
+                <div className="md:hidden mb-6">
+                  <LatestReleaseCard release={featuredRelease} />
+                </div>
+              </div>
+
               <div className="max-w-xl">
-
-                <h1 className="mt-4 text-4xl font-semibold leading-tight md:text-6xl">{site.name}</h1>
-
+                <h1 className="text-4xl font-semibold leading-tight md:text-6xl">{site.name}</h1>
                 <p className="mt-4 text-sm leading-6 text-white/80">{site.description}</p>
+
+                {/* Rotating micro-line */}
+                <NowPlaying titles={nowPlayingTitles} />
 
                 <div className="mt-7 flex flex-wrap gap-6 text-sm">
                   <a
@@ -59,7 +85,7 @@ export default function HomePage() {
           </Container>
         </section>
 
-        {/* MUSIC (still on hero background) */}
+        {/* MUSIC */}
         <section id="music" className="relative z-40 scroll-mt-24 pt-6 pb-10">
           <Container>
             <div className="flex items-baseline justify-between gap-6">
@@ -107,19 +133,14 @@ export default function HomePage() {
           </Container>
         </section>
 
-        {/* VIDEOS (now also on hero background, and pulled up closer to Music) */}
+        {/* VIDEOS (IMPORTANT: View all now goes to /videos) */}
         <section id="videos" className="relative z-40 scroll-mt-24 pt-6 pb-12">
           <Container>
             <div className="flex items-baseline justify-between gap-6">
               <h2 className="text-lg font-semibold tracking-wide">Videos</h2>
-              <a
-                href="https://www.youtube.com/c/JordanBangoji"
-                target="_blank"
-                rel="noreferrer"
-                className="text-sm text-white/70 underline underline-offset-4 hover:text-white"
-              >
+              <Link href="/videos" className="text-sm text-white/70 underline underline-offset-4 hover:text-white">
                 View all
-              </a>
+              </Link>
             </div>
 
             <div className="mt-5 grid gap-10 md:grid-cols-2 md:items-start">
@@ -150,7 +171,7 @@ export default function HomePage() {
         </section>
       </div>
 
-      {/* SHOWS (no top border line) */}
+      {/* SHOWS */}
       <section className="py-12">
         <Container>
           <div className="flex items-baseline justify-between gap-6">
@@ -178,7 +199,7 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* SPOTIFY (no top border line) */}
+      {/* SPOTIFY */}
       <section className="py-12">
         <Container>
           <h2 className="text-lg font-semibold tracking-wide">Spotify</h2>
