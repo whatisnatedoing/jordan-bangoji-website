@@ -51,7 +51,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-zinc-950/70 backdrop-blur">
       <Container>
         <div className="flex items-center justify-between py-4">
-          <Link href="/" className="text-sm font-semibold tracking-wide text-white">
+          <Link href="/" className="text-lg font-semibold tracking-wide text-white">
             {site.name}
           </Link>
 
