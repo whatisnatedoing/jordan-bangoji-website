@@ -8,9 +8,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/10">
       <Container>
-        <div className="flex flex-col gap-4 py-10 text-sm text-white/70">
-          <p className="text-white/85">{site.tagline}</p>
-
+        <div className="flex flex-col items-center gap-4 py-10 text-center text-sm text-white/70">
           <div>
             <p className="mb-2 text-xs uppercase tracking-widest text-white/60">Follow</p>
             <SocialLinks />

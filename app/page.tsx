@@ -58,7 +58,6 @@ export default function HomePage() {
               {/* Bottom hero text */}
               <div className="flex min-h-[calc(100svh-6rem)] flex-col justify-end pb-12 md:pb-20">
                 <div className="max-w-xl">
-                  <p className="text-xs uppercase tracking-widest text-white/70">{site.tagline}</p>
                   <h1 className="mt-4 text-4xl font-semibold leading-tight md:text-6xl">{site.name}</h1>
                   <p className="mt-4 text-sm leading-6 text-white/80">{site.description}</p>
 

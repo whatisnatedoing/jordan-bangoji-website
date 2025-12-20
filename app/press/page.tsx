@@ -24,7 +24,6 @@ const epk = {
   featuredVideoId: 'CNE_PdsxckQ', // Soyayya (already used elsewhere)
   quickFacts: [
     'Top 12 contestant, Nigerian Idol Season 7 (2022).',
-    'Tagline: I SELL AUTHENTICITY FOR FREE.',
     `Fanbase: ${site.tribeName}.`,
   ],
 } as const

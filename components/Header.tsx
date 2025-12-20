@@ -34,7 +34,6 @@ function BurgerIcon({ open }: { open: boolean }) {
 export default function Header() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
-
   const nav = useMemo(() => site.nav, [])
 
   useEffect(() => setOpen(false), [pathname])
@@ -45,12 +44,7 @@ export default function Header() {
       if (e.key === 'Escape') setOpen(false)
     }
     document.addEventListener('keydown', onKeyDown)
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.removeEventListener('keydown', onKeyDown)
-      document.body.style.overflow = prevOverflow
-    }
+    return () => document.removeEventListener('keydown', onKeyDown)
   }, [open])
 
   return (
@@ -70,7 +64,7 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Mobile */}
+          {/* Mobile button */}
           <button
             type="button"
             aria-label="Toggle menu"
@@ -83,47 +77,53 @@ export default function Header() {
         </div>
       </Container>
 
-      {open ? (
-        <div className="fixed inset-0 z-50 md:hidden">
-          {/* Backdrop */}
-          <button
-            aria-label="Close menu"
-            className="absolute inset-0 bg-black/70"
-            onClick={() => setOpen(false)}
-          />
+      {/* Mobile overlay + dropdown (kept mounted so it can animate out) */}
+      <div className="md:hidden">
+        {/* Backdrop */}
+        <button
+          type="button"
+          aria-label="Close menu"
+          onClick={() => setOpen(false)}
+          className={[
+            'fixed inset-0 z-[60] bg-black/70 transition-opacity duration-200',
+            open ? 'opacity-100' : 'pointer-events-none opacity-0',
+          ].join(' ')}
+        />
 
-          {/* Sheet */}
-          <div className="absolute left-0 right-0 top-0 border-b border-white/10 bg-zinc-950/95 backdrop-blur">
-            <Container>
-              <div className="flex items-center justify-between py-4">
-                <span className="text-sm font-semibold tracking-wide text-white">{site.name}</span>
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="rounded-md border border-white/15 p-2 hover:bg-white/5"
-                  aria-label="Close menu"
-                >
-                  <BurgerIcon open />
-                </button>
-              </div>
-
-              <nav className="pb-5">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-2">
+        {/* Dropdown panel */}
+        <div
+          className={[
+            'fixed left-0 right-0 top-[57px] z-[70]', // ~ header height; adjust if your header padding changes
+            'px-4',
+          ].join(' ')}
+        >
+          {/* Height animation using grid rows (0fr -> 1fr) */}
+          <div
+            className={[
+              'grid overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/95 backdrop-blur',
+              'transition-[grid-template-rows,opacity,transform] duration-200',
+              open ? 'grid-rows-[1fr] opacity-100 translate-y-0' : 'grid-rows-[0fr] opacity-0 -translate-y-2 pointer-events-none',
+            ].join(' ')}
+          >
+            <div className="min-h-0 overflow-hidden">
+              <div className="p-3">
+                <nav className="grid gap-1">
                   {nav.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="block rounded-xl px-3 py-2.5 text-sm text-white/85 hover:bg-white/5"
+                      className="rounded-xl px-3 py-2.5 text-sm text-white/85 hover:bg-white/5"
+                      onClick={() => setOpen(false)}
                     >
                       {item.label}
                     </Link>
                   ))}
-                </div>
-              </nav>
-            </Container>
+                </nav>
+              </div>
+            </div>
           </div>
         </div>
-      ) : null}
+      </div>
     </header>
   )
 }
