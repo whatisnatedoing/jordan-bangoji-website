@@ -45,13 +45,13 @@ export const releases: Release[] = [
     },
   },
   {
-    id: 'no_conditional_love',
-    title: 'No Conditional Love',
+    id: 'no_transactional_love',
+    title: 'No Transactional Love',
     type: 'Single',
     year: '2025',
     featured: false,
     youtubeVideoId: 'pbKdLfQf72c',
-    coverImage: '/images/covers/no_conditional_love.jpg',
+    coverImage: '/images/covers/no_transactional_love.jpg',
     description: 'A soulful single (placeholder).',
     links: {
       spotify: 'https://open.spotify.com/album/4DleAeGR7zOCZmgUmXSmB8?si=Xy--11cxRjSAfPt6cMoIDg',

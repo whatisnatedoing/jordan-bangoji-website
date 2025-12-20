@@ -8,6 +8,8 @@ export type Video = {
 
 export const videos: Video[] = [
   { id: 'soyayya', title: 'Soyayya', youtubeId: 'CNE_PdsxckQ', kind: 'Official Video', year: '2025' },
+  { id: 'if_i', title: 'If I', youtubeId: 'pbKdLfQf72c', kind: 'Audio', year: '2025' },
+  { id: 'no_transactional_love', title: 'No Transactional Love', youtubeId: 'NdFGequozBg', kind: 'Audio', year: '2025' },
 
   // Placeholders (swap IDs/titles later)
   ...Array.from({ length: 18 }).map((_, i) => ({
